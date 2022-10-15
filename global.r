@@ -37,7 +37,7 @@ names(cards.web) <- "cards"
 cards.web <- data.frame(cards.web$cards)
 
 card.types.excl <- c("Treasure", "Victory", "Curse")
-card.sets <- c("Base", "Base, 2E", "Base, 1E", "Intrigue")
+card.sets <- c("Base", "Base, 2E", "Base, 1E", "Intrigue", "Seaside")
 
 cards.db <- cards.web %>% 
   filter(Set %in% card.sets &
@@ -48,19 +48,25 @@ cards.db <- cards.web %>%
 cards.draw <- c(# Base Set
                 "Moat", "Smithy", "Council Room", "Laboratory", "Library", "Witch",
                 # Intrigue
-                "Courtyard", "Masquerade", "Shanty Town", "Steward", "Diplomat", "Secret Passage", "Patrol", "Torturer", "Nobles"
+                "Courtyard", "Masquerade", "Shanty Town", "Steward", "Diplomat", "Secret Passage", "Patrol", "Torturer", "Nobles",
+                # Seaside
+                "Caravan", "Tide Pools", "Sea Witch", "Tactician", "Wharf"
                 )
 
 cards.village <- c(# Base Set
                   "Village", "Festival", 
                   # Intrigue
-                  "Shanty Town", "Mining Village", "Nobles"
+                  "Shanty Town", "Mining Village", "Nobles",
+                  # Seaside
+                  "Native Village", "Fishing Village", "Bazaar"
                 )
 
 cards.thrashing <- c(# Base Set
                     "Chapel", "Moneylender", "Remodel", "Mine", "Sentry", 
                     # Intrigue 
-                    "Masquerade", "Steward", "Replace", "Trading Post", "Upgrade"
+                    "Masquerade", "Steward", "Replace", "Trading Post", "Upgrade",
+                    # Seaside
+                    "Sailor", "Salvager"
                     )
 
 cards.attack <- cards.db %>% filter(str_detect(Types, "Attack")) %>% pull(Name)
