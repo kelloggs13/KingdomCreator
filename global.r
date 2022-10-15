@@ -37,13 +37,17 @@ names(cards.web) <- "cards"
 cards.web <- data.frame(cards.web$cards)
 
 card.types.excl <- c("Treasure", "Victory", "Curse")
-card.sets <- c("Base", "Base, 2E", "Base, 1E", "Intrigue", "Seaside")
+card.sets <- c("Base", "Base, 2E", "Intrigue", "Seaside")
 
 cards.db <- cards.web %>% 
   filter(Set %in% card.sets &
            !(Types %in% card.types.excl)
          ) %>% 
-  select(Name, Set, Types)
+  select(Name, Set, Types) %>% 
+  mutate(Set = case_when(Set %in% c("Base", "Base, 2E") ~ "BaseSet 2nd Ed.",
+                   TRUE ~ Set)
+         )
+
 
 cards.draw <- c(# Base Set
                 "Moat", "Smithy", "Council Room", "Laboratory", "Library", "Witch",

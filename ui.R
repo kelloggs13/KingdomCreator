@@ -76,7 +76,7 @@ shinyUI(navbarPage(title = "Kingdom Generator V0.1",
         sidebarPanel(width = 4,
             
             h4("Sets to include"),
-            pickerInput('select_set', NULL, choices = unique(cards.db.flags$Set), selected = c("Base", "Base, 2E"), multiple = TRUE ),
+            pickerInput('select_set', NULL, choices = unique(cards.db.flags$Set), selected = c("BaseSet 2nd Ed."), multiple = TRUE ),
             
             hr(),
             
