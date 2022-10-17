@@ -1,18 +1,25 @@
 
 
+# Server ----
 
 shinyServer(function(input, output) {
+  
   observeEvent(input$create_kingdom, {
     
     draw.success <- FALSE
     draw.counter <- 1
-
-    while(draw.success == FALSE & draw.counter <= 100) {
+    max.tries <- 100
+    
+    # generate kingdom ----
+    
+    while(draw.success == FALSE & draw.counter <= max.tries) { # do until 10-card-kingdom is found  or until max tries 
       
       cards.kingdom <- cards.db.flags
 
       cards.kingdom <- cards.kingdom %>% filter(Set %in% input$select_set)
 
+      # generate balanced kingdom ----
+      
       if(input$is_kingdom_balanced == "Balanced") {
         cards.kingdom <- cards.kingdom[sample(nrow(cards.kingdom)), ]
         card.attack <- cards.kingdom %>% filter(IsAttack == 1) %>% head(1) %>% pull(Name)
@@ -29,6 +36,8 @@ shinyServer(function(input, output) {
         ) %>% paste0(collapse = ",")
       }
 
+      # generate unbalanced kingdom ----
+      
       if(input$is_kingdom_balanced == "Unbalanced") {
         if(input$remove_draw == TRUE) cards.kingdom <- cards.kingdom %>% filter(IsDraw == 0)
         if(input$remove_village == TRUE) cards.kingdom <- cards.kingdom %>% filter(IsVillage == 0)
@@ -39,10 +48,9 @@ shinyServer(function(input, output) {
         kingdom <- cards.kingdom %>% head(10) %>% pull(Name) %>% paste0(collapse = ",")
       }
 
-      
       draw.counter <- draw.counter + 1
       
-      if(str_count(kingdom, ",") == 9) { draw.success <- TRUE }
+      if(str_count(kingdom, ",") == 9) { draw.success <- TRUE } # stop if kingdom with 10 cards was found
       
     }
 
@@ -52,6 +60,8 @@ shinyServer(function(input, output) {
 
     pic.size <- "300px"
 
+    # render images of the generated kingdom ----
+    
     for(ii in 1:10){
       
       local({
@@ -65,8 +75,7 @@ shinyServer(function(input, output) {
                                          )
         })
     }
-
-  }) # end observeEvent
+  }) 
 })
 
 

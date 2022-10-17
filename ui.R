@@ -1,5 +1,6 @@
 
 
+# CSS styles ----
 
 style.text.about <- "font-family: Verdana; 
                      color: white; 
@@ -21,12 +22,14 @@ style.text.kingdom <- "color:white;
                        padding-left: 20px;
                       "
 
-shinyUI(navbarPage(title = "Kingdom Generator V0.1", 
+# UI ----
+
+shinyUI(navbarPage(title = paste0("Kingdom Generator V", version.kg), 
                    theme = shinytheme("darkly"), 
                    setBackgroundImage(src = "./images/background.jpg"),
-                   # includeCSS("www/css/css.css"),
                    
                   
+   # About section ----
    tabPanel('About',
             
             div(
@@ -67,39 +70,39 @@ shinyUI(navbarPage(title = "Kingdom Generator V0.1",
               , style = style.text.about
             ),
             
-           ), # end tabpanel 
+           ), 
 
+    # Generator ----
     tabPanel('Generator',
+               
+      # User Inputs
+      sidebarLayout(
+          sidebarPanel(width = 4,
+              
+              h4("Sets to include"),
+              pickerInput('select_set', NULL, choices = unique(cards.db.flags$Set), selected = c("BaseSet 2nd Ed."), multiple = TRUE ),
+              
+              hr(),
+              
+              h4("Type of Kingdom"),
+              
+              radioGroupButtons('is_kingdom_balanced', NULL, selected = "Balanced", choices = c("Balanced", "Unbalanced")),
              
-    # Sidebar with a slider input for number of bins
-    sidebarLayout(
-        sidebarPanel(width = 4,
-            
-            h4("Sets to include"),
-            pickerInput('select_set', NULL, choices = unique(cards.db.flags$Set), selected = c("BaseSet 2nd Ed."), multiple = TRUE ),
-            
-            hr(),
-            
-            h4("Type of Kingdom"),
-            
-            radioGroupButtons('is_kingdom_balanced', NULL, selected = "Balanced", choices = c("Balanced", "Unbalanced")),
-           
-            conditionalPanel(
-              condition = "input.is_kingdom_balanced === 'Unbalanced'",
-              prettySwitch('remove_draw', 'Remove Draw?', value = FALSE, status = "success") ,
-              prettySwitch('remove_village', 'Remove Villages?', value = FALSE, status = "success"),
-              prettySwitch('remove_trashing', 'Remove Trashing?', value = FALSE, status = "success"),
-              prettySwitch('remove_attacks', 'Remove Attacks?', value = FALSE, status = "success"),
-            ),
-            
-            hr(),
-            
-            actionButton("create_kingdom", "Create new kingdom", class = "btn-primary"),
-            
-        ),
+              conditionalPanel(
+                condition = "input.is_kingdom_balanced === 'Unbalanced'",
+                prettySwitch('remove_draw', 'Remove Draw?', value = FALSE, status = "success") ,
+                prettySwitch('remove_village', 'Remove Villages?', value = FALSE, status = "success"),
+                prettySwitch('remove_trashing', 'Remove Trashing?', value = FALSE, status = "success"),
+                prettySwitch('remove_attacks', 'Remove Attacks?', value = FALSE, status = "success"),
+              ),
+              
+              hr(),
+              
+              actionButton("create_kingdom", "Create new kingdom", class = "btn-primary"),
+          ),
 
+        # Kingdom
         mainPanel(
-          
           h4(span(textOutput("kingdom.text")), style = style.text.kingdom),
 
           verbatimTextOutput("kingdom.src"),
@@ -108,10 +111,7 @@ shinyUI(navbarPage(title = "Kingdom Generator V0.1",
 
           flowLayout(imageOutput("pic1"), imageOutput("pic2"), imageOutput("pic3"), imageOutput("pic4"), imageOutput("pic5"),
                      imageOutput("pic6"), imageOutput("pic7"), imageOutput("pic8"), imageOutput("pic9"), imageOutput("pic10"))
-    
-       )
+          )
       )
-    ) # end tabpanel 
-    
-  
+    ) 
 ))

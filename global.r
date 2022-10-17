@@ -9,9 +9,10 @@
 # https://stackoverflow.com/questions/33392784/make-bold-text-in-html-output-r-shiny
 
 # todo:
-# - sicherstellen dass immer genau 10 karten gezogen werden, if not, repeat
-# check  "bridge" => set-zuordnung
-
+# - check  "bridge" => set-zuordnung
+# - add filter for defends: cards.web %>% filter(str_detect(Types, "Reaction") ) %>% select(Set, Name, Types) %>% arrange(Set, Name)
+# - erweiterung um die most popular expansions
+# - ideen / features von https://play.google.com/store/apps/details?id=com.minusik.apps.jackofalldominion&hl=en&gl=US
 
 require(tidyverse)
 require(readxl)
@@ -24,6 +25,10 @@ require(shinyhelper)
 require(shinydashboard)
 require(shinyBS)
 
+version.kg <- "0.2"
+
+
+# Fetch card data from wiki.dominionstrategy.com ----
 
 url <-  "http://wiki.dominionstrategy.com/index.php/List_of_cards"
 
@@ -36,8 +41,10 @@ cards.web <- webdata[1]
 names(cards.web) <- "cards"
 cards.web <- data.frame(cards.web$cards)
 
-card.types.excl <- c("Treasure", "Victory", "Curse")
+# sets and cards to include in dashboard ----
+
 card.sets <- c("Base", "Base, 2E", "Intrigue", "Seaside")
+card.types.excl <- c("Treasure", "Victory", "Curse")
 
 cards.db <- cards.web %>% 
   filter(Set %in% card.sets &
@@ -48,6 +55,7 @@ cards.db <- cards.web %>%
                    TRUE ~ Set)
          )
 
+# add flags for draw-, village-, trashing- and attack-cards ----
 
 cards.draw <- c(# Base Set
                 "Moat", "Smithy", "Council Room", "Laboratory", "Library", "Witch",
@@ -82,8 +90,6 @@ cards.db.flags <- cards.db %>% mutate(IsDraw = ifelse(Name %in% cards.draw, 1, 0
                                         )
 
 
-# call app for testing as in shinyapps.io
-# runApp("D:/DataScience Portfolio/Dominion/DominionCardSelector/")
 
 
 
